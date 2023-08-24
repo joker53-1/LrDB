@@ -2,11 +2,6 @@ syntax = "proto3";
 package errorpb;
 
 import "metapb.proto";
-import "gogoproto/gogo.proto";
-
-option (gogoproto.marshaler_all) = true;
-option (gogoproto.sizer_all) = true;
-option (gogoproto.unmarshaler_all) = true;
 
 message NotLeader {
     uint64 region_id = 1;

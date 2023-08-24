@@ -3,11 +3,6 @@ package kvrpcpb;
 
 import "metapb.proto";
 import "errorpb.proto";
-import "gogoproto/gogo.proto";
-
-option (gogoproto.marshaler_all) = true;
-option (gogoproto.sizer_all) = true;
-option (gogoproto.unmarshaler_all) = true;
 
 // Raw commands.
 message RawGetRequest {

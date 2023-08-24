@@ -4,11 +4,6 @@ package schedulerpb;
 import "metapb.proto";
 import "eraftpb.proto";
 
-import "gogoproto/gogo.proto";
-
-option (gogoproto.sizer_all) = true;
-option (gogoproto.marshaler_all) = true;
-option (gogoproto.unmarshaler_all) = true;
 
 service Scheduler {
     // GetMembers get the member list of this cluster. It does not require

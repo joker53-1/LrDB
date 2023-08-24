@@ -5,11 +5,6 @@ import "kvrpcpb.proto";
 import "raft_serverpb.proto";
 import "coprocessor.proto";
 
-import "gogoproto/gogo.proto";
-
-option (gogoproto.sizer_all) = true;
-option (gogoproto.marshaler_all) = true;
-option (gogoproto.unmarshaler_all) = true;
 
 // Serve as a distributed kv database. See the request and response definitions in
 // kvrpcpb.proto
