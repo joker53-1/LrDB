@@ -1,25 +1,12 @@
-[package]
-name = "tinykv-rs"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+members = [
+  "libs/coprocessor",
+  "libs/protos",
+  "kv",
+  "cmd/tiny-server",
+  "cmd/tiny-client",
+]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[features]
-default = ["prost-codec"]
-protobuf-codec = ["protobuf-build/grpcio-protobuf-codec", "raft-proto/protobuf-codec", "grpcio/protobuf-codec"]
-prost-codec = ["prost", "prost-derive", "lazy_static", "protobuf-build/grpcio-prost-codec", "raft-proto/prost-codec", "grpcio/prost-codec"]
-
-[dependencies]
-bytes = "1.4"
-protobuf = "=2.8.0"
-prost = { version = "0.9", optional = true }
-prost-derive = { version = "0.9", optional = true }
-futures = "0.3.5"
-lazy_static = { version = "1.3", optional = true }
-
-raft-proto = { version = "0.*", default-features = false }
-grpcio = { version = "0.*", default-features = false }
-
-[build-dependencies]
-protobuf-build = { version = "0.15.1", default-features = false}
+[workspace.dependencies]
+protos = { path= "libs/protos" }
+kv = { path = "kv" }

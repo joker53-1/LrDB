@@ -1,0 +1,8 @@
+[package]
+name = "kv"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tonic = "0.9.2"
+protos = { workspace = true }
