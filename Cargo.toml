@@ -2,11 +2,19 @@
 members = [
   "libs/coprocessor",
   "libs/protos",
-  "kv",
+  "irkv",
+  "irdb",
   "cmd/tiny-server",
   "cmd/tiny-client",
 ]
 
 [workspace.dependencies]
-protos = { path= "libs/protos" }
-kv = { path = "kv" }
+protos = { path = "libs/protos" }
+irkv = { path = "irkv" }
+irdb = { path = "irdb" }
+tokio = { version = "1.32.0", features = [
+  "rt",
+  "rt-multi-thread",
+  "macros",
+  "signal",
+] }

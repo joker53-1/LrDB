@@ -1,6 +1,15 @@
-use kv::KvServer;
+use irkv::KvServer;
+use irdb::SQLServer;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    KvServer::start("[::1]:50051").await
+    tokio::spawn(async {
+        KvServer::start("[::1]:50051").await.unwrap();
+    });
+
+    tokio::spawn(async {
+        SQLServer::start("[::1]:50052").await.unwrap();
+    });
+
+    Ok(tokio::signal::ctrl_c().await?)
 }

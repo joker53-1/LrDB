@@ -17,7 +17,7 @@ use tonic::{Request, Response, Status};
 pub struct Server;
 
 impl Server {
-    pub async fn start(addr: &str,) -> Result<(), Box<dyn std::error::Error>> {
+    pub async fn start(addr: &str) -> Result<(), Box<dyn std::error::Error>> {
         let addr = addr.parse().unwrap();
         let server = Server::default();
 
@@ -33,7 +33,12 @@ impl Server {
 impl TinyKv for Server {
     async fn kv_get(&self, request: Request<GetRequest>) -> Result<Response<GetResponse>, Status> {
         println!("Got a request: {:?}", request);
-        let reply = GetResponse { region_error: None, error: None, value: request.into_inner().key, not_found: false };
+        let reply = GetResponse {
+            region_error: None,
+            error: None,
+            value: request.into_inner().key,
+            not_found: false,
+        };
         Ok(Response::new(reply))
     }
 

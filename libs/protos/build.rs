@@ -8,7 +8,7 @@
 //}
 
 use std::env::var;
-use std::fs::{File, self};
+use std::fs::{self, File};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
@@ -33,21 +33,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     fs::create_dir_all(&out_dir).unwrap();
 
-    tonic_build::configure().out_dir(out_dir.clone())
-        .compile(
-            &protos,
-            &["proto"]
-        )?;
+    tonic_build::configure()
+        .out_dir(out_dir.clone())
+        .compile(&protos, &["proto"])?;
     generate_mod_file(out_dir);
     Ok(())
 }
 
-
 fn generate_mod_file(out_dir: String) {
     let modules = list_rs_files(out_dir.clone()).filter_map(|path| {
         let name = path.file_stem().unwrap().to_str().unwrap();
-        if name == "mod"
-        {
+        if name == "mod" {
             return None;
         }
         Some((name.replace('-', "_"), name.to_owned()))
