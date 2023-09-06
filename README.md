@@ -1,2 +1,2 @@
-# tinykv-rs
-Distributed Key-Value service in Rust.
+# irdb
+Distributed Database service in Rust.
