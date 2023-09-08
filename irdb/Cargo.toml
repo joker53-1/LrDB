@@ -13,3 +13,35 @@ flate2 = { version = "1.0.27", default-features = false, features = [
 
 anyhow = "1.0.75"
 tokio = { workspace = true }
+tokio-util = { workspace = true }
+tokio-stream = { workspace = true }
+
+tracing = { workspace = true }
+tracing-futures = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+async-trait = { workspace = true }
+
+bytes = "1.4.0"
+byteorder = "1.4.3"
+
+futures = "0.3.28"
+iota = "0.2"
+lazy_static = "1.4.0"
+thiserror = "1.0.48"
+
+num-derive = "0.4.0"
+num-traits = "0.2.16"
+chrono = "0.4.20"
+pin-project = "1.0.10"
+
+
+regex = "1"
+
+rand = "0.8"
+rsa = "0.6.0"
+rust-crypto = "0.2.36"
+rustls-pemfile = "1.0.0"
+sha1 = "0.10.1"
+tokio-native-tls = "0.3.0"
+openssl = { version = "0.10", features = ["vendored"] }
