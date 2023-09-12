@@ -59,10 +59,10 @@ pub enum DecodeRowError {
 
     #[error("{0:?}")]
     ColumnTypeNotFound(String),
-    
+
     #[error("{0:?}")]
     ColumnTimeLengthInvalid(usize),
 
     #[error("{0:?}")]
-    ColumnDateTimeLengthInvalid(usize)
+    ColumnDateTimeLengthInvalid(usize),
 }

@@ -12,7 +12,7 @@ use super::{err::MySQLError, stream::LocalStream};
 use crate::{
     charset::{COLLATION_NAME_ID_MYSQL5, DEFAULT_CHARSET_NAME},
     err::ProtocolError,
-    mysql::mysql_const::*,
+    mysql_const::*,
     server::codec::{make_err_packet, ok_packet},
     session::{Session, SessionMut},
     util::*,
@@ -247,7 +247,10 @@ impl ServerHandshakeCodec {
 
         match self.auth_plugin_name.as_str() {
             AUTH_NATIVE_PASSWORD => {
-                if !compare(&self.auth_data, &calc_password(&self.salt, self.password.as_bytes())) {
+                if !compare(
+                    &self.auth_data,
+                    &calc_password(&self.salt, self.password.as_bytes()),
+                ) {
                     return Err(ProtocolError::AuthFailed(self.make_auth_err_info()));
                 }
                 Ok(())
@@ -276,7 +279,10 @@ impl ServerHandshakeCodec {
         make_err_packet(MySQLError::new(
             1045,
             "28000".as_bytes().to_vec(),
-            format!("Access denied for user {:?}, (using password: Yes)", self.user),
+            format!(
+                "Access denied for user {:?}, (using password: Yes)",
+                self.user
+            ),
         ))
     }
 
@@ -292,7 +298,10 @@ impl ServerHandshakeCodec {
         make_err_packet(MySQLError::new(
             1045,
             "28000".as_bytes().to_vec(),
-            format!("unsupport authentication plugin name {:?}", self.auth_plugin_name,),
+            format!(
+                "unsupport authentication plugin name {:?}",
+                self.auth_plugin_name,
+            ),
         ))
     }
 
@@ -440,7 +449,9 @@ pub async fn handshake(
             }
 
             ServerHandshakeStatus::WriteAutoSwitch => {
-                framed.send(framed.codec().generate_auth_switch_request()).await?;
+                framed
+                    .send(framed.codec().generate_auth_switch_request())
+                    .await?;
             }
 
             ServerHandshakeStatus::Complete => {
@@ -463,9 +474,7 @@ mod test {
 
     use crate::{
         err::ProtocolError,
-        server::{
-            auth::{ServerHandshakeCodec, ServerHandshakeStatus},
-        },
+        server::auth::{ServerHandshakeCodec, ServerHandshakeStatus},
     };
 
     #[tokio::test]
@@ -546,7 +555,10 @@ mod test {
 
         let _res = framed.next().await.unwrap();
 
-        assert_eq!(framed.codec().next_handshake_status, ServerHandshakeStatus::WriteAutoSwitch);
+        assert_eq!(
+            framed.codec().next_handshake_status,
+            ServerHandshakeStatus::WriteAutoSwitch
+        );
 
         framed.codec_mut().next_handshake_status = ServerHandshakeStatus::ReadAutoSwitchResponse;
 
@@ -560,14 +572,19 @@ mod test {
             0xe9, 0x43, 0x36, 0x24, 0x4c, 0x71, 0xef, 0x32, 0x1a, 0x5d,
         ];
 
-        let _ = framed.send(BytesMut::from(&auto_switch_response_data[..])).await;
+        let _ = framed
+            .send(BytesMut::from(&auto_switch_response_data[..]))
+            .await;
 
         let mut parts = framed.into_parts();
         parts.io = server;
         framed = Framed::from_parts(parts);
 
         let res = framed.next().await.unwrap();
-        assert_eq!(framed.codec().next_handshake_status, ServerHandshakeStatus::Complete);
+        assert_eq!(
+            framed.codec().next_handshake_status,
+            ServerHandshakeStatus::Complete
+        );
 
         if let Err(ProtocolError::AuthFailed(_data)) = res {
             assert!(true);

@@ -4,7 +4,7 @@ use bytes::{BufMut, BytesMut};
 use tokio_util::codec::{Decoder, Encoder};
 
 use super::auth::ServerHandshakeCodec;
-use crate::{err::ProtocolError, mysql::mysql_const::*, server::err::MySQLError, util::get_length};
+use crate::{err::ProtocolError, mysql_const::*, server::err::MySQLError, util::get_length};
 
 /// The `CommonPacket` trait contains generic methods for handling the mysql protocol
 pub trait CommonPacket {
@@ -24,7 +24,12 @@ pub struct PacketCodec {
 
 impl PacketCodec {
     pub fn new(session: ServerHandshakeCodec, init_size: usize) -> Self {
-        Self { session, buf: BytesMut::with_capacity(init_size), is_max: false, seq: 0 }
+        Self {
+            session,
+            buf: BytesMut::with_capacity(init_size),
+            is_max: false,
+            seq: 0,
+        }
     }
 
     #[inline]

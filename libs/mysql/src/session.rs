@@ -1,5 +1,5 @@
 pub trait Session {
-    fn get_db(&self) -> Option<String>; 
+    fn get_db(&self) -> Option<String>;
     fn get_charset(&self) -> Option<String>;
     fn get_autocommit(&self) -> Option<String>;
 }

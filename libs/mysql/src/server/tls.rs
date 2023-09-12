@@ -29,15 +29,20 @@ pub fn make_pkcs12() -> (Rsa<Private>, PKey<Private>, Vec<u8>) {
     let pub_key = PKey::from_rsa(rsa_key.clone()).unwrap();
 
     let mut name = X509Name::builder().unwrap();
-    name.append_entry_by_nid(Nid::COMMONNAME, subject_name).unwrap();
+    name.append_entry_by_nid(Nid::COMMONNAME, subject_name)
+        .unwrap();
     let name = name.build();
 
     let key_usage = KeyUsage::new().digital_signature().build().unwrap();
 
     let mut builder = X509::builder().unwrap();
     builder.set_version(2).unwrap();
-    builder.set_not_before(&Asn1Time::days_from_now(0).unwrap()).unwrap();
-    builder.set_not_after(&Asn1Time::days_from_now(3650).unwrap()).unwrap();
+    builder
+        .set_not_before(&Asn1Time::days_from_now(0).unwrap())
+        .unwrap();
+    builder
+        .set_not_after(&Asn1Time::days_from_now(3650).unwrap())
+        .unwrap();
     builder.set_subject_name(&name).unwrap();
     builder.set_issuer_name(&name).unwrap();
     builder.append_extension(key_usage).unwrap();
@@ -47,7 +52,9 @@ pub fn make_pkcs12() -> (Rsa<Private>, PKey<Private>, Vec<u8>) {
     let cert = builder.build();
 
     let pkcs12_builder = Pkcs12::builder();
-    let pkcs12 = pkcs12_builder.build("irdb", subject_name, &pub_key, &cert).unwrap();
+    let pkcs12 = pkcs12_builder
+        .build("irdb", subject_name, &pub_key, &cert)
+        .unwrap();
     let der = pkcs12.to_der().unwrap();
 
     (rsa_key, pub_key, der)

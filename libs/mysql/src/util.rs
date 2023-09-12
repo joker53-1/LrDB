@@ -14,13 +14,13 @@
 
 use std::{cmp::Ordering, io::Read, ptr::copy_nonoverlapping};
 
+use byteorder::{ByteOrder, LittleEndian};
 use bytes::{Buf, BufMut, BytesMut};
-use byteorder::{LittleEndian, ByteOrder};
 use chrono::prelude::*;
 use crypto::{self, digest::Digest};
 use rand::{rngs::StdRng, Rng, SeedableRng};
 
-use crate::mysql::mysql_const::{EOF_HEADER, OK_HEADER};
+use crate::mysql_const::{EOF_HEADER, OK_HEADER};
 
 // random_buf: generate random byte vector
 #[inline]
@@ -133,7 +133,7 @@ pub trait BufExt: Buf {
     fn get_lenc_str_bytes(&mut self) -> (Vec<u8>, bool) {
         let (length, is_null, _) = self.get_lenc_int();
 
-        // When length < 1 means that the origin bytes is 0x00 or 0xfb, 
+        // When length < 1 means that the origin bytes is 0x00 or 0xfb,
         // In the str context, means the str is null, so return true here.
         if length < 1 || is_null || !self.has_remaining() {
             return (vec![0], true);
@@ -149,7 +149,6 @@ pub trait BufExt: Buf {
         let (length, ..) = self.get_lenc_int();
         self.advance(length as usize)
     }
-
 }
 
 //impl<T: AsRef<[u8]> + Buf> BufExt for T {}
@@ -237,8 +236,7 @@ mod test {
 
     use super::{length_encoded_string, BufExt};
     use crate::util::{
-        calc_caching_sha2password, calc_password, compare, get_length, is_eof, is_ok,
-        random_buf,
+        calc_caching_sha2password, calc_password, compare, get_length, is_eof, is_ok, random_buf,
     };
 
     #[test]
@@ -363,14 +361,18 @@ mod test {
 
     #[test]
     fn test_is_ok_success() {
-        let data = [0x07, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00];
+        let data = [
+            0x07, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+        ];
         let result = is_ok(&data[..]);
         assert_eq!(result, true);
     }
 
     #[test]
     fn test_is_ok_data_error() {
-        let data = [0x05, 0x00, 0x00, 0x05, 0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00];
+        let data = [
+            0x05, 0x00, 0x00, 0x05, 0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
+        ];
         let result = is_ok(&data[..]);
         assert_eq!(result, false);
     }

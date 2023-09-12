@@ -27,7 +27,7 @@ use tokio_native_tls::{
     TlsStream,
 };
 
-use crate::{server::tls::make_pkcs12, err::ProtocolError};
+use crate::{err::ProtocolError, server::tls::make_pkcs12};
 
 lazy_static! {
     static ref TLS_ACCEPTOR: tokio_native_tls::TlsAcceptor = {
@@ -45,7 +45,7 @@ pub enum LocalStream {
 }
 
 impl LocalStream {
-    pub async fn make_tls(&mut self) -> Result<(), ProtocolError>{
+    pub async fn make_tls(&mut self) -> Result<(), ProtocolError> {
         *self = match self {
             LocalStream::Plain(ref mut plain) => {
                 LocalStream::Secure(TLS_ACCEPTOR.accept(plain.take().unwrap()).await?)
@@ -124,13 +124,9 @@ impl From<TlsStream<TcpStream>> for LocalStream {
 impl LocalStream {
     pub fn get_inner(&self) -> &TcpStream {
         match self {
-            Self::Plain(stream) => {
-                stream.as_ref().unwrap()
-            },
+            Self::Plain(stream) => stream.as_ref().unwrap(),
 
-            Self::Secure(stream) => {
-                stream.get_ref().get_ref().get_ref()
-            }
+            Self::Secure(stream) => stream.get_ref().get_ref().get_ref(),
         }
     }
 }
