@@ -2,10 +2,11 @@
 members = [
   "libs/coprocessor",
   "libs/protos",
+  "libs/engine",
   "irkv",
   "irdb",
-  "cmd/tiny-server",
-  "cmd/tiny-client",
+  "cmd/irdb-server",
+  "cmd/irdb-client",
 ]
 
 [workspace.dependencies]

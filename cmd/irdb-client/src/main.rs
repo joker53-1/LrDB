@@ -1,8 +1,8 @@
-use protos::protos::{kvrpcpb::GetRequest, tinykvpb::tiny_kv_client::TinyKvClient};
+use protos::protos::{kvrpcpb::GetRequest, irkvpb::ir_kv_client::IrKvClient};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = TinyKvClient::connect("http://[::1]:50051").await?;
+    let mut client = IrKvClient::connect("http://[::1]:50051").await?;
 
     let request = tonic::Request::new(GetRequest {
         context: None,

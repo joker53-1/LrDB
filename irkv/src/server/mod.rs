@@ -8,8 +8,8 @@ use protos::protos::{
         ScanRequest, ScanResponse,
     },
     raft_serverpb::{Done, RaftMessage, SnapshotChunk},
-    tinykvpb::tiny_kv_server::TinyKv,
-    tinykvpb::tiny_kv_server::TinyKvServer,
+    irkvpb::ir_kv_server::IrKv,
+    irkvpb::ir_kv_server::IrKvServer,
 };
 use tonic::{Request, Response, Status};
 
@@ -22,7 +22,7 @@ impl Server {
         let server = Server::default();
 
         tonic::transport::Server::builder()
-            .add_service(TinyKvServer::new(server))
+            .add_service(IrKvServer::new(server))
             .serve(addr)
             .await?;
         Ok(())
@@ -30,7 +30,7 @@ impl Server {
 }
 
 #[tonic::async_trait]
-impl TinyKv for Server {
+impl IrKv for Server {
     async fn kv_get(&self, request: Request<GetRequest>) -> Result<Response<GetResponse>, Status> {
         println!("Got a request: {:?}", request);
         let reply = GetResponse {

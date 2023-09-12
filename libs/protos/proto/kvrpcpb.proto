@@ -168,12 +168,12 @@ message CheckTxnStatusResponse {
     // rolled back: lock_ttl == 0 && commit_version == 0
     uint64 lock_ttl = 2;
     uint64 commit_version = 3;
-    // The action performed by TinyKV in response to the CheckTxnStatus request.
+    // The action performed by IrKV in response to the CheckTxnStatus request.
     Action action = 4;
 }
 
 // Resolve lock will find all locks belonging to the transaction with the given start timestamp.
-// If commit_version is 0, TinyKV will rollback all locks. If commit_version is greater than
+// If commit_version is 0, IrKV will rollback all locks. If commit_version is greater than
 // 0 it will commit those locks with the given commit timestamp.
 // The client will make a resolve lock request for all secondary keys once it has successfully
 // committed or rolled back the primary key.
@@ -202,7 +202,7 @@ enum Op {
     Put = 0;
     Del = 1;
     Rollback = 2;
-    // Used by TinySQL but not TinyKV.
+    // Used by TinySQL but not IrKV.
     Lock = 3;
 }
 
@@ -216,7 +216,7 @@ enum Action {
     NoAction = 0;
     // The lock is rolled back because it has expired.
     TTLExpireRollback = 1;
-    // The lock does not exist, TinyKV left a record of the rollback, but did not
+    // The lock does not exist, IrKV left a record of the rollback, but did not
     // have to delete a lock.
     LockNotExistRollback = 2;
 }

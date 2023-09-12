@@ -1,5 +1,5 @@
 syntax = "proto3";
-package tinykvpb;
+package irkvpb;
 
 import "kvrpcpb.proto";
 import "raft_serverpb.proto";
@@ -8,7 +8,7 @@ import "coprocessor.proto";
 
 // Serve as a distributed kv database. See the request and response definitions in
 // kvrpcpb.proto
-service TinyKv {
+service IrKv {
     // KV commands with mvcc/txn supported.
     rpc KvGet(kvrpcpb.GetRequest) returns (kvrpcpb.GetResponse) {}
     rpc KvScan(kvrpcpb.ScanRequest) returns (kvrpcpb.ScanResponse) {}
@@ -24,7 +24,7 @@ service TinyKv {
     rpc RawDelete(kvrpcpb.RawDeleteRequest) returns (kvrpcpb.RawDeleteResponse) {}
     rpc RawScan(kvrpcpb.RawScanRequest) returns (kvrpcpb.RawScanResponse) {}
 
-    // Raft commands (tinykv <-> tinykv).
+    // Raft commands (irKV <-> irKV).
     rpc Raft(stream raft_serverpb.RaftMessage) returns (raft_serverpb.Done) {}
     rpc Snapshot(stream raft_serverpb.SnapshotChunk) returns (raft_serverpb.Done) {}
 
