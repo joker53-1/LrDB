@@ -9,5 +9,4 @@ edition = "2021"
 anyhow = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
-dbmash = { workspace = true }
-mysql = { workspace = true }
+db = { workspace = true }

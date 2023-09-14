@@ -2,9 +2,9 @@
 members = [
   "libs/coprocessor",
   "libs/protos",
-  "libs/mysql",
+  "libs/protocol",
+  "libs/error",
   "libs/db",
-  "libs/dbmash",
   "irkv",
   "irdb",
   "cmd/tiny-server",
@@ -16,8 +16,9 @@ default-members = ["cmd/tiny-server"]
 [workspace.dependencies]
 irkv = { path = "irkv" }
 protos = { path = "libs/protos" }
-dbmash = { path = "libs/dbmash" }
-mysql = { path = "libs/mysql" }
+db = { path = "libs/db" }
+protocol = { path = "libs/protocol" }
+error = { path = "libs/error" }
 irdb = { path = "irdb" }
 
 tokio = { version = "1.32.0", features = [

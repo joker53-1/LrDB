@@ -3,6 +3,8 @@ use std::sync::atomic::AtomicU32;
 use err::DBError;
 
 mod err;
+pub mod runtime;
+pub mod config;
 
 pub struct ReqContext {
     pub db_name: String,

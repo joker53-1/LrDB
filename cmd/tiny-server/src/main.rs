@@ -1,4 +1,4 @@
-use dbmash::{MashConfig, DBMashKind};
+use db::config::Config;
 use irdb::SQLServer;
 use irkv::KvServer;
 use tracing::Level;
@@ -11,12 +11,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         KvServer::start("0.0.0.0:8089").await.unwrap();
     });
 
-    let config = MashConfig {
+    let config = Config {
         db: "mydb".to_string(),
         user: "root".to_string(),
         password: "12345678".to_string(),
         listen_addr: "0.0.0.0:8088".to_string(),
-        mash_type: DBMashKind::MySQL,
     };
 
     tokio::spawn(async {
