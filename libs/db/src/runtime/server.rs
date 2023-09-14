@@ -5,13 +5,13 @@ use error::Error;
 use futures::SinkExt;
 use futures::StreamExt;
 use protocol::err::ProtocolError;
-use protocol::server::SERVER_VERSION;
-use protocol::server::auth::ServerHandshakeCodec;
 use protocol::server::auth::handshake;
+use protocol::server::auth::ServerHandshakeCodec;
 use protocol::server::codec::CommonPacket;
 use protocol::server::codec::PacketCodec;
 use protocol::server::codec::PacketSend;
 use protocol::server::stream::LocalStream;
+use protocol::server::SERVER_VERSION;
 use tokio::io::AsyncRead;
 use tokio::io::AsyncWrite;
 use tokio::net::TcpListener;
@@ -21,8 +21,6 @@ use tokio_util::codec::Framed;
 use tracing::{debug, error, info};
 
 use crate::config::Config;
-
-
 
 pub struct Server {
     pub config: Config,
@@ -43,7 +41,13 @@ impl Server {
             + Encoder<PacketSend<Box<[u8]>>, Error = ProtocolError>
             + CommonPacket,
     {
-        let version = vec![1, 0, 0, 1, 1, 39, 0, 0, 2, 3, 100, 101, 102, 0, 0, 0, 17, 64, 64, 118, 101, 114, 115, 105, 111, 110, 95, 99, 111, 109, 109, 101, 110, 116, 0, 12, 45, 0, 112, 0, 0, 0, 253, 0, 0, 31, 0, 0, 5, 0, 0, 3, 254, 0, 0, 2, 0, 29, 0, 0, 4, 28, 77, 121, 83, 81, 76, 32, 67, 111, 109, 109, 117, 110, 105, 116, 121, 32, 83, 101, 114, 118, 101, 114, 32, 40, 71, 80, 76, 41, 5, 0, 0, 5, 254, 0, 0, 2, 0];
+        let version = vec![
+            1, 0, 0, 1, 1, 39, 0, 0, 2, 3, 100, 101, 102, 0, 0, 0, 17, 64, 64, 118, 101, 114, 115,
+            105, 111, 110, 95, 99, 111, 109, 109, 101, 110, 116, 0, 12, 45, 0, 112, 0, 0, 0, 253,
+            0, 0, 31, 0, 0, 5, 0, 0, 3, 254, 0, 0, 2, 0, 29, 0, 0, 4, 28, 77, 121, 83, 81, 76, 32,
+            67, 111, 109, 109, 117, 110, 105, 116, 121, 32, 83, 101, 114, 118, 101, 114, 32, 40,
+            71, 80, 76, 41, 5, 0, 0, 5, 254, 0, 0, 2, 0,
+        ];
         // let pck = PacketSend::Encode("MySQL Community Server (GPL)".as_bytes().into());
         let pck = PacketSend::Origin(version.into());
         framed.send(pck).await.unwrap();

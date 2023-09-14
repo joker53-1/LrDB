@@ -1,8 +1,8 @@
 use std::io;
 
 use protocol::err::ProtocolError;
-use thiserror::Error as ThisError;
 use std::error::Error as StdError;
+use thiserror::Error as ThisError;
 
 #[derive(Debug, ThisError)]
 pub enum Error {
