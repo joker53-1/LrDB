@@ -55,7 +55,7 @@ impl Server {
         Ok(())
     }
 
-    pub async fn start(&mut self) -> Result<(), Error> {
+    pub async fn start(&self) -> Result<(), Error> {
         let listener = TcpListener::bind(&self.config.listen_addr).await?;
         info!("Listening on {}", listener.local_addr()?);
 

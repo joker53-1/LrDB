@@ -4,7 +4,6 @@ members = [
   "libs/protos",
   "libs/protocol",
   "libs/error",
-  "libs/db",
   "irkv",
   "irdb",
   "cmd/tiny-server",
@@ -16,7 +15,6 @@ default-members = ["cmd/tiny-server"]
 [workspace.dependencies]
 irkv = { path = "irkv" }
 protos = { path = "libs/protos" }
-db = { path = "libs/db" }
 protocol = { path = "libs/protocol" }
 error = { path = "libs/error" }
 irdb = { path = "irdb" }

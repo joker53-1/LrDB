@@ -1,5 +1,4 @@
-use db::config::Config;
-use irdb::SQLServer;
+use irdb::{SQLServer, config::Config};
 use irkv::KvServer;
 use tracing::Level;
 
@@ -21,7 +20,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     tokio::spawn(async {
-        SQLServer::start(config).await.unwrap();
+        let server = SQLServer::new(config);
+        server.start().await.unwrap();
     });
 
     Ok(tokio::signal::ctrl_c().await?)

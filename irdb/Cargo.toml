@@ -7,6 +7,21 @@ edition = "2021"
 
 [dependencies]
 anyhow = { workspace = true }
+
+async-trait = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+serde_derive = { workspace = true }
+
 tokio = { workspace = true }
+tokio-util = { workspace = true }
+tokio-stream = { workspace = true }
+
 tracing = { workspace = true }
-db = { workspace = true }
+tracing-futures = { workspace = true }
+tracing-subscriber = { workspace = true }
+futures = { workspace = true }
+bytes = { workspace = true }
+
+protocol = { workspace = true }
+error = { workspace = true }

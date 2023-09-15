@@ -9,6 +9,6 @@ edition = "2021"
 irkv = { workspace = true }
 irdb = { workspace = true }
 tokio = { workspace = true }
-db = { workspace = true }
+
 tracing-subscriber = { workspace = true }
 tracing = { workspace = true }
