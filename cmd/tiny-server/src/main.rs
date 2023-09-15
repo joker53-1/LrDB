@@ -1,4 +1,4 @@
-use irdb::{SQLServer, config::Config};
+use irdb::{config::Config, SQLServer};
 use irkv::KvServer;
 use tracing::Level;
 

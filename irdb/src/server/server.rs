@@ -1,4 +1,5 @@
 use std::net::SocketAddr;
+use std::sync::atomic::AtomicU32;
 
 use bytes::BytesMut;
 use error::Error;
@@ -21,6 +22,8 @@ use tokio_util::codec::Framed;
 use tracing::{debug, error, info};
 
 use crate::config::Config;
+use crate::server::irdb::IrDBInstance;
+use crate::server::irdb::ReqContext;
 
 pub struct Server {
     pub config: Config,
@@ -33,26 +36,6 @@ impl Server {
             config,
             server_version: SERVER_VERSION.to_owned(),
         }
-    }
-    async fn handle_command<T, C>(framed: &mut Framed<T, C>, data: BytesMut) -> Result<(), Error>
-    where
-        T: AsyncRead + AsyncWrite + Unpin,
-        C: Decoder<Item = BytesMut, Error = ProtocolError>
-            + Encoder<PacketSend<Box<[u8]>>, Error = ProtocolError>
-            + CommonPacket,
-    {
-        let version = vec![
-            1, 0, 0, 1, 1, 39, 0, 0, 2, 3, 100, 101, 102, 0, 0, 0, 17, 64, 64, 118, 101, 114, 115,
-            105, 111, 110, 95, 99, 111, 109, 109, 101, 110, 116, 0, 12, 45, 0, 112, 0, 0, 0, 253,
-            0, 0, 31, 0, 0, 5, 0, 0, 3, 254, 0, 0, 2, 0, 29, 0, 0, 4, 28, 77, 121, 83, 81, 76, 32,
-            67, 111, 109, 109, 117, 110, 105, 116, 121, 32, 83, 101, 114, 118, 101, 114, 32, 40,
-            71, 80, 76, 41, 5, 0, 0, 5, 254, 0, 0, 2, 0,
-        ];
-        // let pck = PacketSend::Encode("MySQL Community Server (GPL)".as_bytes().into());
-        let pck = PacketSend::Origin(version.into());
-        framed.send(pck).await.unwrap();
-
-        Ok(())
     }
 
     pub async fn start(&self) -> Result<(), Error> {
@@ -72,6 +55,8 @@ impl Server {
             let handshake_framed =
                 Framed::with_capacity(LocalStream::from(socket), handshake_codec, 8196);
 
+            let mut ins = IrDBInstance::new("DB service");
+
             tokio::spawn(async move {
                 let res = handshake(handshake_framed).await;
                 if let Err(err) = res {
@@ -85,25 +70,16 @@ impl Server {
                 let packet_codec = PacketCodec::new(parts.codec, 8196);
                 let io = parts.io;
 
-                let mut framed = Framed::with_capacity(io, packet_codec, 16384);
+                let framed = Framed::with_capacity(io, packet_codec, 16384);
+                let mut cx = ReqContext {
+                    framed,
+                    stmt_id: AtomicU32::new(0),
+                };
 
-                while let Some(res) = framed.next().await {
-                    if let Err(err) = res {
-                        error!("read framed error {:?}", err);
-                        return;
-                    }
-
-                    let data = res.unwrap();
-
-                    debug!("new commond: {:?}", data);
-                    if let Err(err) = Self::handle_command(&mut framed, data).await {
-                        error!("read framed error {:?}", err);
-                        return;
-                    }
+                if let Err(err) = ins.run(&mut cx).await {
+                    error!("instance run error {:?}", err);
                 }
             });
         }
-
-        Ok(())
     }
 }

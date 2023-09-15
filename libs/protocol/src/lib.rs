@@ -5,7 +5,7 @@ extern crate lazy_static;
 
 mod charset;
 pub mod err;
-mod mysql_const;
+pub mod mysql_const;
 pub mod server;
 mod session;
 mod util;
