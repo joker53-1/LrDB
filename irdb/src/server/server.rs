@@ -1,25 +1,21 @@
-use std::net::SocketAddr;
 use std::sync::atomic::AtomicU32;
 
-use bytes::BytesMut;
 use error::Error;
-use futures::SinkExt;
+
 use futures::StreamExt;
-use protocol::err::ProtocolError;
+
 use protocol::server::auth::handshake;
 use protocol::server::auth::ServerHandshakeCodec;
-use protocol::server::codec::CommonPacket;
+
 use protocol::server::codec::PacketCodec;
-use protocol::server::codec::PacketSend;
+
 use protocol::server::stream::LocalStream;
 use protocol::server::SERVER_VERSION;
-use tokio::io::AsyncRead;
-use tokio::io::AsyncWrite;
+
 use tokio::net::TcpListener;
-use tokio_util::codec::Decoder;
-use tokio_util::codec::Encoder;
+
 use tokio_util::codec::Framed;
-use tracing::{debug, error, info};
+use tracing::{error, info};
 
 use crate::config::Config;
 use crate::server::irdb::IrDBInstance;

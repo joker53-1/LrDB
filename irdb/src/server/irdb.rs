@@ -4,26 +4,20 @@ use futures::SinkExt;
 use futures::StreamExt;
 use protocol::err::ProtocolError;
 use protocol::mysql_const::ComType;
-use protocol::server::auth::handshake;
-use protocol::server::auth::ServerHandshakeCodec;
-use protocol::server::codec::PacketCodec;
+
 use protocol::server::codec::PacketSend;
 use protocol::server::codec::{make_err_packet, CommonPacket};
 use protocol::server::err::MySQLError;
-use protocol::server::stream::LocalStream;
-use protocol::server::SERVER_VERSION;
+
 use std::time::{Duration, Instant};
 use std::{marker::PhantomData, sync::atomic::AtomicU32};
 use tokio::io::AsyncRead;
 use tokio::io::AsyncWrite;
-use tokio::net::TcpListener;
+
 use tokio_util::codec::Decoder;
 use tokio_util::codec::Encoder;
 use tokio_util::codec::Framed;
-use tracing::{debug, error, info};
-use tracing_subscriber::registry::Data;
-
-use crate::DBError;
+use tracing::{debug, error};
 
 pub struct ReqContext<T, C> {
     pub framed: Framed<T, C>,
@@ -127,7 +121,7 @@ where
             ComType::STMT_EXECUTE => todo!(),
             ComType::STMT_CLOSE => todo!(),
             ComType::STMT_RESET => todo!(),
-            x => {
+            _x => {
                 todo!()
             }
         }
